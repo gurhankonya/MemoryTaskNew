@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Timers;
 using UnityEngine;
+using UnityEditor;
 
 public class ExperimentManager : MonoBehaviour
 {
@@ -32,6 +33,10 @@ public class ExperimentManager : MonoBehaviour
     // time during which we freeze the UI while the participant memorizes the digits
     public int sleepieTime;
 
+    // Data and Headers for the csv-file we write
+    private List<List<string>> _data;
+    private List<string> _csvHeaders;
+
 
     /// <summary>
     /// Initialize our private variables
@@ -48,12 +53,22 @@ public class ExperimentManager : MonoBehaviour
         _isPressable = true;
 
         // TODO CSV stuff
+        _data = new List<List<string>>();
+        _csvHeaders = new List<string>();
+        _csvHeaders.Add("Block Number");
+        _csvHeaders.Add("Task Number");
+        _csvHeaders.Add("Sequence Length");
+        _csvHeaders.Add("Shown Sequence");
+        _csvHeaders.Add("Participant Sequence");
+        _csvHeaders.Add("Answered Correctly");
+        _csvHeaders.Add("Reaction Time");
+
     }
 
     
     /// <summary>
     /// Reacts to the participant being either right or wrong.
-    /// TODO will save the collected data in a CSV file
+    /// Saves the collected data in a CSV file
     /// starts the next task after the output of the current task was analyzed by calling StartNextTask()
     /// </summary>
     /// <param name="participantWasRight"> Boolean that tells us whether the participant's sequence corresponds to the
@@ -62,6 +77,18 @@ public class ExperimentManager : MonoBehaviour
     {
         Debug.Log(string.Format("Participant was: {0}", participantWasRight));
         _responseTime = Time.realtimeSinceStartup;
+
+        List<string> taskData = new List<string>();
+
+        taskData.Add(_currentBlockNumber.ToString());
+        taskData.Add(_currentTaskNumber.ToString());
+        taskData.Add(_sequenceLength.ToString());
+        taskData.Add(sequenceGenerator.GetSequenceString());
+        taskData.Add(getParticipantSequenceString());
+        taskData.Add(participantWasRight.ToString());
+        taskData.Add((_responseTime - _stimuliStartTime).ToString());
+        _data.Add(taskData);
+
         StartNextTask();
     }
     
@@ -242,7 +269,14 @@ public class ExperimentManager : MonoBehaviour
         else
         {
             ShowMessage("THE END... Now please add your credit card number... for a... prize?");
-            // TODO CSV
+            // Generating and saving a csv file with all the collected data
+            List<string> csvLines = CSVTools.GenerateCSV(_data, _csvHeaders);
+            foreach (string line in csvLines)
+            {
+                Debug.Log(line);
+            }
+
+            CSVTools.SaveCSV(csvLines, Application.dataPath + "/Data/" + GUID.Generate());
         }
     }
 
@@ -261,6 +295,16 @@ public class ExperimentManager : MonoBehaviour
     private void ResetTaskNumber()
     {
         _currentTaskNumber = 0;
+    }
+
+    private string getParticipantSequenceString()
+    {
+        string seq = "";
+        foreach(int digit in _participantSequence)
+        {
+            seq += digit.ToString();
+        }
+        return seq;
     }
     
 }

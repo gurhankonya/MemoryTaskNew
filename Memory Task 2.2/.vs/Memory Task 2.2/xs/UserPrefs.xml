@@ -1,0 +1,16 @@
+﻿<Properties StartupConfiguration="{01A3F061-31E3-28CA-3767-3096B40A1254}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Code/ExperimentManager/ExperimentManager.cs">
+    <Files>
+      <File FileName="Assets/Code/ExperimentManager/ExperimentManager.cs" Line="278" Column="78" />
+      <File FileName="Assets/Code/SequenceGenerator/SequenceGenerator.cs" Line="46" Column="29" />
+      <File FileName="Assets/Code/CSV/CSVTools.cs" Line="57" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="47383346-16bc-42a8-977a-d6ba7368326d" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
